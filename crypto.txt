@@ -1,0 +1,115 @@
+import java.util.Scanner;
+
+public class Crypto {
+
+    public static void main(String[] args) {
+    Scanner input = new Scanner(System.in);
+    System.out.print("Cual es tu mensaje a encriptar?: ");
+    String mensaje = input.nextLine();
+    mensaje = normalizeText(mensaje);
+        System.out.println(mensaje);
+    mensaje = obify(mensaje);
+        System.out.println(mensaje);
+    mensaje = caesarify(mensaje, 1);
+        System.out.println(mensaje);
+    mensaje = groupify(mensaje, 5);
+    //SERGIO input
+        // TPC FSH PCJ PCP output con 1 en shiftkey y 3 en groupify
+        System.out.println(mensaje);
+    }
+
+    public static String normalizeText(String str){
+    str = str.replaceAll("\\W", "");
+    str = str.replaceAll("[0-9]", "");
+        str = str.toUpperCase();
+        return str;
+    }
+    public static String obify(String str){
+        if (str.contains("O")){
+            str= str.replaceAll("O","OBO");
+        }
+        if(str.contains("A")){
+            str= str.replaceAll("A","OBA");
+        }
+        if(str.contains("E")){
+            str= str.replaceAll("E","OBE");
+        }
+        if (str.contains("I")){
+            str= str.replaceAll("I","OBI");
+        }
+        if (str.contains("U")){
+            str= str.replaceAll("U","OBU");
+        }
+        if (str.contains("Y")){
+            str= str.replaceAll("Y","OBY");
+        }
+        return str;
+    }
+    public static String unobify(String str){
+        if(str.contains("OBA")){
+            str= str.replaceAll("OBA","A");
+        }
+        if(str.contains("OBE")){
+            str= str.replaceAll("OBE","E");
+        }
+        if (str.contains("OBI")){
+            str= str.replaceAll("OBI","I");
+        }
+        if (str.contains("OBU")){
+            str= str.replaceAll("OBU","U");
+        }
+        if (str.contains("OBY")){
+            str= str.replaceAll("OBY","Y");
+        }
+        if (str.contains("OBO")) {
+            str = str.replaceAll("OBO", "O");
+        }
+        return str;
+    }
+    public static String caesarify(String plainText,int shiftKey) {
+        final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        plainText = plainText.toUpperCase();
+        String cipherText="";
+
+        for(int i=0;i<plainText.length();i++) {
+            int charPosition = ALPHABET.indexOf(plainText.charAt(i));
+            int keyVal = (shiftKey+charPosition)%26;
+            char replaceVal = ALPHABET.charAt(keyVal);
+            cipherText += replaceVal;
+        }
+        return cipherText;
+    }
+
+    public static String decrypt(String cipherText, int shiftKey) {
+        final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        cipherText = cipherText.toUpperCase();
+        String plainText="";
+        for(int i=0;i<cipherText.length();i++){
+            int charPosition = ALPHABET.indexOf(cipherText.charAt(i));
+            int keyVal = (charPosition-shiftKey)%26;
+            if(keyVal<0) {
+                keyVal = ALPHABET.length() + keyVal;
+            }
+            char replaceVal = ALPHABET.charAt(keyVal);
+            plainText += replaceVal;
+        }
+        return plainText;
+    }
+    public static String groupify(String str, int input) {
+        char separator = ' ';
+        StringBuilder sb = new StringBuilder(str);
+        if (sb.length()%input !=0){
+                while (sb.length() % input !=0) {
+                    sb.insert(sb.length(), 'x');
+                }
+            }
+        if (sb.length() % input == 0){
+                    for (int i = 0; i < str.length() / input; i++) {
+                        sb.insert(((i + 1) * input) + i, separator);
+                    }
+        }
+        return str = sb.toString();
+    }
+
+
+}
